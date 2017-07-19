@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="chatbox" translate="label" sortOrder="100">
+            <label>Chatbox Manager</label>
+        </tab>
+        <section id="chatbox" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Facebook Support Live Configuration</label>
+            <tab>chatbox</tab>
+            <resource>Magenest_FacebookSupportLive::config_api</resource>
+            <group id="config" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Facebook Support Live Settings</label>
+                <field id="link_page" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Page Facebook</label>
+                </field>
+                <field id="app_id_page" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Facebook AppID</label>
+                </field>
+                <field id="title_open" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Title Tab Open</label>
+                </field>
+                <field id="title_close" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Title Tab Close</label>
+                </field>
+                <field id="tab_color" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Tab Color</label>
+                    <frontend_model>Magenest\FacebookSupportLive\Block\Color</frontend_model>
+                </field>
+                <field id="text_color" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Text Color</label>
+                    <frontend_model>Magenest\FacebookSupportLive\Block\Color</frontend_model>
+                </field>
+                <field id="enable_shadow" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Shadow</label>
+                    <source_model>Magenest\FacebookSupportLive\Model\Config\EnableChatbox</source_model>
+                </field>
+                <field id="enable_fb" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable FacebookSupportLive</label>
+                    <source_model>Magenest\FacebookSupportLive\Model\Config\EnableChatbox</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

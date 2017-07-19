@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add
+                id="Magenest_FacebookSupportLive::chatbox"
+                title="Chatbox"
+                module="Magenest_FacebookSupportLive"
+                sortOrder="50"
+                parent="Magento_Backend::marketing"
+                resource="Magenest_FacebookSupportLive::chatbox"
+        />
+        <add
+                id="Magenest_FacebookSupportLive::dashboard_data"
+                title="Dashboard"
+                module="Magenest_FacebookSupportLive"
+                sortOrder="55"
+                parent="Magenest_FacebookSupportLive::chatbox"
+                action="facebooksupportlive/chatbox/dashboard"
+                resource="Magenest_FacebookSupportLive::dashboard_data"
+        />
+        <add
+                id="Magenest_FacebookSupportLive::facebooksupport"
+                title="Facebook Support Live"
+                module="Magenest_FacebookSupportLive"
+                sortOrder="70"
+                parent="Magenest_FacebookSupportLive::chatbox"
+                action="adminhtml/system_config/edit/section/chatbox"
+                resource="Magenest_FacebookSupportLive::facebooksupport"
+        />
+
+        <add
+                id="Magenest_FacebookSupportLive::stat"
+                title="User Statistics"
+                module="Magenest_FacebookSupportLive"
+                sortOrder="80"
+                parent="Magenest_FacebookSupportLive::chatbox"
+                action="facebooksupportlive/chatbox/index"
+                resource="Magenest_FacebookSupportLive::stat"
+        />
+
+    </menu>
+</config>

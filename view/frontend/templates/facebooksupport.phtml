@@ -1,0 +1,155 @@
+<?php if($block->getEnableChatbox() == 'yes'){?>
+    <script>
+
+        window.fbAsyncInit = function() {
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    document.getElementById('chatbox_log').style.display = 'none';
+                    document.getElementById('chatbox_en').style.display = 'block';
+                } else if (response.status === 'not_authorized') {
+                    document.getElementById('chatbox_en').style.display = 'none';
+                    document.getElementById('chatbox_log').style.display = 'block';
+
+                } else {
+                    document.getElementById('chatbox_en').style.display = 'none';
+                    document.getElementById('chatbox_log').style.display = 'block';
+
+                }
+            });
+
+
+        };
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=<?php echo $block->getAppId()?>";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+
+        function login() {
+
+            FB.login(function(response) {
+                if (response.status === 'connected') {
+                    location.reload();
+                } else if (response.status === 'not_authorized') {
+                } else {
+                }
+
+            }, {scope: 'email, user_birthday, user_location'});
+
+
+        }
+
+
+        function getInfo() {
+            FB.api('/me', 'GET', {fields: 'name,email,birthday,location, link, age_range'}, function(response) {
+                var age_s;
+                if(typeof response.birthday != 'undefined')
+                {
+                    var date =response.birthday.split('/');
+
+                    if(date.length == 3)
+                    {
+                        var year = parseInt(date[2]);
+                        var d = new Date();
+                        var year_s = parseInt(d.getFullYear());
+
+                        age_s = parseInt(year_s - year);
+
+
+                    }
+                    else
+                    {
+                        age_s = 'NULL';
+                    }
+                }
+
+                if(typeof response.location == 'undefined' && typeof response.email != 'undefined' && typeof response.birthday != 'undefined')
+                {
+                    getValue(response.email, response.name, response.birthday, 'NULL', response.link, age_s);
+                }
+                else if(typeof response.email == 'undefined' && typeof response.location != 'undefined' && typeof response.birthday != 'undefined')
+                {
+                    getValue('NULL', response.name, response.birthday, response.location.name, response.link, age_s);
+                }
+                else if(typeof response.birthday == 'undefined' && typeof response.location != 'undefined' && typeof response.birthday != 'undefined')
+                {
+                    getValue(response.email, response.name, 'NULL', response.location.name, response.link, 'NULL');
+                }
+                else if(typeof response.location == 'undefined' && typeof response.email == 'undefined' && typeof response.birthday != 'undefined')
+                {
+                    getValue('NULL', response.name, response.birthday, 'NULL', response.link, age_s);
+                }
+                else if(typeof response.location == 'undefined' && typeof response.email != 'undefined' && typeof response.birthday == 'undefined')
+                {
+                    getValue(response.email, response.name, 'NULL', 'NULL', response.link, 'NULL');
+                }
+                else if(typeof response.location != 'undefined' && typeof response.email == 'undefined' && typeof response.birthday == 'undefined')
+                {
+                    getValue('NULL', response.name, 'NULL', response.location.name, response.link, 'NULL');
+                }
+                else
+                {
+                    getValue(response.email, response.name, response.birthday, response.location.name, response.link, age_s);
+                }
+
+                document.getElementById('pic').src = 'https://graph.facebook.com/'+response.id+'/picture?width=40&height=40';
+                document.getElementById('na_user').innerHTML = 'Hi! '+response.name;
+            });
+        }
+        function getValue(c_email, c_name, c_birthday, c_location, c_link, c_age)
+        {
+
+            jQuery.ajax({
+                type: "post",
+                url: '<?php echo $block->getDataUserUrl()?>?isAjax=true',
+                data: {
+                    name_user : c_name,
+                    email_user : c_email,
+                    birthday_user : c_birthday,
+                    location_user : c_location,
+                    linkfb_user : c_link,
+                    age_user : c_age
+                },
+                showLoader: true,
+                success: function () {
+
+                }
+            });
+        }
+    </script>
+
+    <div id="fb-root"></div>
+    <div id="chatbox" class="<?php if($block->getEnableShadow() == 'yes'){echo "shadow";}?>">
+        <div id="chatbox_log" style="display: none;">
+            <div class="title_open_chatbox" style="background-color: <?php echo $block->getTabColor();?>; color: <?php echo $block->getTextColor();?>"><?php echo $block->getTitleOpenTab(); ?></div>
+            <div class="frm_chatbox">
+                <div class="title_close_chatbox" style="float:left; background-color: <?php echo $block->getTabColor();?>; color: <?php echo $block->getTextColor();?>"><?php echo $block->getTitleCloseTab(); ?></div>
+                <button onclick="login();" id="login">Login with Facebook</button>
+                <div class="title"><a href="https://store.magenest.com/magento-2/facebook-messenger.html" target="_blank">Integrated by <span style="color: #FF7345;">Magenest</span></a></div>
+            </div>
+
+        </div>
+        <div id="chatbox_en" style="display: none;">
+            <div onclick="getInfo();" class="title_open_chatbox" style="display: block; background-color: <?php echo $block->getTabColor();?>; color: <?php echo $block->getTextColor();?>"><?php echo $block->getTitleOpenTab(); ?></div>
+            <div class="frm_chatbox" style="display: none;">
+                <div class="title_close_chatbox" style="background-color: <?php echo $block->getTabColor();?>; color: <?php echo $block->getTextColor();?>"><?php echo $block->getTitleCloseTab(); ?></div>
+                <div id="c_user">
+                    <div id="ava_user"><img id="pic" width="40px" height="40px" src=""></div>
+                    <div id="na_user"></div>
+                </div>
+                <div class="fb-page" data-tabs="messages,events" data-href="<?php echo $block->getLinkPage(); ?>" data-width="300" data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"></div>
+                <div class="title"><a href="https://store.magenest.com/magento-2/facebook-messenger.html" target="_blank">Integrated by <span style="color: #FF7345;">Magenest</span></a></div>
+            </div>
+        </div>
+    </div>
+
+
+<?php } ?>
+
+
+
+
+
